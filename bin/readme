@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+d=$1
+D=$(printf "%02d" "$d")
+
+
+curl "https://adventofcode.com/2019/day/${d}" \
+  -H "cookie: session=${SESSION_ID}" | sed -n "/<article class=\"day-desc\">/, /<\\/article>/p" > "src/Day${D}/README.md"

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+d=$1
+D=$(printf "%02d" "$d")
+
+
+curl "https://adventofcode.com/2019/day/${d}/input" \
+  -H "cookie: session=${SESSION_ID}" > "src/Day${D}/input.txt"
