@@ -26,14 +26,17 @@ jobs:
       - run: echo $PWD
       - run:
           name: "go test"
-          command: go test -race -covermode=atomic -coverprofile=c.out ./...
+          command: go test -race -covermode=atomic -coverprofile=cover.out ./...
       - run:
           name: "Create a temp directory for artifacts"
           command: |
             mkdir -p /tmp/artifacts
-            go tool cover -html=c.out -o coverage.html
+            go tool cover -html=cover.out -o coverage.html
             mv coverage.html /tmp/artifacts
       - store_artifacts:
           path: /tmp/artifacts
-      - codecov/upload:
-          file: c.out
+      - run:
+          name: Upload Coverage
+          command: |
+            bash <(curl -s https://codecov.io/bash)
+
