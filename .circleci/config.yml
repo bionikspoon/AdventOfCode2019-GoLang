@@ -6,6 +6,7 @@ jobs:
     working_directory: /go/src/github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
     steps:
       - checkout
+      - run: echo $PWD
       - run:
           name: "go test"
           command: go test -coverprofile=c.out ./...
