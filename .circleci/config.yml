@@ -1,0 +1,39 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+    - image: circleci/golang:1.15
+      auth:
+        username: bionikspoon
+        password: $DOCKERHUB_PASSWORD
+    parameters:
+      org-name:
+        type: string
+        default: bionikspoon
+      repo-name:
+        type: string
+        default: AdventOfCode2019-GoLang
+    working_directory: /go/src/github.com/<< parameters.org-name >>/<< parameters.repo-name >>
+    steps:
+      - checkout
+      - run:
+          name: Get dependencies
+          command: go get -t -v ./...
+      - run: echo $PWD
+      - run:
+          name: "go test"
+          command: go test -race -covermode=atomic -coverprofile=cover.out ./...
+      - run:
+          name: "Create a temp directory for artifacts"
+          command: |
+            mkdir -p /tmp/artifacts
+            go tool cover -html=cover.out -o coverage.html
+            mv coverage.html /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+      - run:
+          name: Upload Coverage
+          command: |
+            bash <(curl -s https://codecov.io/bash)
+
