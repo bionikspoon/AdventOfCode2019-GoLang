@@ -1,43 +1,64 @@
 package day01
 
 import (
-	"fmt"
-	"math"
 	"strconv"
 	"strings"
 )
 
-type module struct{ mass int }
-
-func (m module) fuelRequired() int {
-	return intDiv(m.mass, 3) - 2
-}
-
-func intDiv(numerator, denominator int) int {
-	return int(math.Floor(float64(numerator) / float64(denominator)))
-}
-
+// Part1 solves for the fuel requirement for modules
 func Part1(input string) string {
 
-	temp := strings.Split(input, "\n")
+	moduleMasses := readInts(input)
+	fuelRequired := sumWith(fuelRequiredForMass, moduleMasses)
 
-	sum := 0
-
-	for _, line := range temp {
-		lineValue, err := strconv.Atoi(line)
-		if err != nil {
-			continue
-		}
-
-		sum += module{lineValue}.fuelRequired()
-
-	}
-
-	fmt.Println(sum)
-
-	return strconv.Itoa(sum)
+	return strconv.Itoa(fuelRequired)
 }
 
+// Part2 solves for the fuel requirement for additional fuel
 func Part2(input string) string {
-	return input
+	moduleMasses := readInts(input)
+	fuelRequired := sumWith(fuelRequiredForFuel, moduleMasses)
+
+	return strconv.Itoa(fuelRequired)
+}
+
+func sumWith(fn func(int) int, masses []int) int {
+	sum := 0
+	for _, mass := range masses {
+		sum += fn(mass)
+	}
+
+	return sum
+}
+
+func fuelRequiredForMass(mass int) int {
+	return int(mass/3) - 2
+}
+
+func fuelRequiredForFuel(mass int) int {
+	fuelRequired := fuelRequiredForMass(mass)
+
+	if fuelRequired >= 0 {
+		return fuelRequired + fuelRequiredForFuel(fuelRequired)
+	}
+
+	return 0
+}
+
+func readInts(input string) (ints []int) {
+	lines := strings.Split(strings.TrimSpace(input), "\n")
+
+	for _, line := range lines {
+		i, err := strconv.Atoi(line)
+		check(err)
+		ints = append(ints, i)
+	}
+
+	return
+}
+
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
 }

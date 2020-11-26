@@ -6,7 +6,6 @@ import (
 )
 
 func TestPart1(t *testing.T) {
-
 	want := "3497399"
 
 	if got := Part1(readFile(t, "input.txt")); got != want {
@@ -15,8 +14,6 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
-	t.SkipNow()
-
 	want := "5243207"
 
 	if got := Part2(readFile(t, "input.txt")); got != want {
@@ -33,27 +30,46 @@ func readFile(t *testing.T, filename string) string {
 	return string(input)
 }
 
-func Test_module_fuelRequired(t *testing.T) {
-	type fields struct {
+func Test_fuelRequiredForMass(t *testing.T) {
+	type args struct {
 		mass int
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		want   int
+		name string
+		args args
+		want int
 	}{
-		{"case", fields{12}, 2},
-		{"case", fields{14}, 2},
-		{"case", fields{1969}, 654},
-		{"case", fields{100756}, 33583},
+		{"case", args{12}, 2},
+		{"case", args{14}, 2},
+		{"case", args{1969}, 654},
+		{"case", args{100756}, 33583},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := module{
-				mass: tt.fields.mass,
+			if got := fuelRequiredForMass(tt.args.mass); got != tt.want {
+				t.Errorf("fuelRequiredForMass() = %v, want %v", got, tt.want)
 			}
-			if got := m.fuelRequired(); got != tt.want {
-				t.Errorf("module.fuelRequired() = %v, want %v", got, tt.want)
+		})
+	}
+}
+
+func Test_fuelRequiredForFuel(t *testing.T) {
+	type args struct {
+		fuelMass int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{"case", args{14}, 2},
+		{"case", args{1969}, 966},
+		{"case", args{100756}, 50346},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := fuelRequiredForFuel(tt.args.fuelMass); got != tt.want {
+				t.Errorf("fuelRequiredForFuel() = %v, want %v", got, tt.want)
 			}
 		})
 	}
