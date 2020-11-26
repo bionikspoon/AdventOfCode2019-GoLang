@@ -20,7 +20,6 @@ jobs:
       - run:
           name: Get dependencies
           command: go get -t -v ./...
-      - run: echo $PWD
       - run:
           name: "go test"
           command: go test -race -covermode=atomic -coverprofile=cover.out ./...
