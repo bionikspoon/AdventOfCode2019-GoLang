@@ -5,11 +5,11 @@ jobs:
     - image: circleci/golang:1.15
     parameters:
       org-name:
-        type: env_var_name
-        default: CIRCLE_PROJECT_USERNAME
+        type: string
+        default: bionikspoon
       repo-name:
-        type: env_var_name
-        default: CIRCLE_PROJECT_REPONAME
+        type: string
+        default: AdventOfCode2019-GoLang
     working_directory: /go/src/github.com/<< parameters.org-name >>/<< parameters.repo-name >>
     steps:
       - checkout
