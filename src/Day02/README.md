@@ -1,4 +1,4 @@
-## \--- Day 2: 1202 Program Alarm ---
+## Day 2: 1202 Program Alarm
 
 On the way to your [gravity assist][1] around the Moon, your ship computer beeps angrily about a " [1202 program alarm][2] ". On the radio, an Elf is already explaining how to handle the situation: "Don't worry, that's perfectly norma--" The ship computer [bursts into flames][3] .
 
@@ -57,7 +57,7 @@ Here are the initial and final states of a few more small programs:
 
 Once you have a working computer, the first step is to restore the gravity assist program (your puzzle input) to the "1202 program alarm" state it had just before the last computer caught fire. To do this, _before running the program_ , replace position `1` with the value `12` and replace position `2` with the value `2` . _What value is left at position `0`_ after the program halts?
 
-## \--- Part Two ---
+## Part Two
 
 "Good, the new computer seems to be working correctly! _Keep it nearby_ during this mission - you'll probably use it again. Real Intcode computers support many more features than your new one, but we'll let you know what they are as you need them."
 
@@ -77,8 +77,13 @@ Once the program has halted, its output is available at address `0` , also just 
 
 Find the input _noun_ and _verb_ that cause the program to produce the output `19690720` . _What is `100 * noun + verb` ?_ (For example, if `noun=12` and `verb=2` , the answer would be `1202` .)
 
+## Link
+
+[https://adventofcode.com/2019/day/2][6]
+
 [1]: https://en.wikipedia.org/wiki/Gravity_assist
 [2]: https://www.hq.nasa.gov/alsj/a11/a11.landing.html#1023832
 [3]: https://en.wikipedia.org/wiki/Halt_and_Catch_Fire
 [4]: https://en.wikipedia.org/wiki/Magic_smoke
 [5]: https://en.wikipedia.org/wiki/Integer
+[6]: https://adventofcode.com/2019/day/2
