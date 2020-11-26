@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
     - image: circleci/golang:1.15
+      auth:
+        username: bionikspoon
+        password: $DOCKERHUB_PASSWORD
     parameters:
       org-name:
         type: string
