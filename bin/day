@@ -3,3 +3,43 @@ set -euo pipefail
 
 d=$1
 D=$(printf "%02d" "$d")
+new_day_dir="src/Day${D}"
+
+
+echo "Removing existing directory"
+echo "---------------------------"
+rm -rfv "$new_day_dir"
+
+printf "\n"
+echo "Copying template directory"
+echo "----------------"
+cp -rv "src/Template" "$new_day_dir"
+
+
+printf "\n"
+echo "Replacing placeholder values"
+echo "----------------------------"
+find "$new_day_dir" -name "*.go" -exec sed -i "" "s/dayxx/day${D}/" {} +
+mv -v "$new_day_dir/DayXX_test.go" "$new_day_dir/Day${D}_test.go"
+mv -v "$new_day_dir/DayXX.go" "$new_day_dir/Day${D}.go"
+
+
+
+
+printf "\n"
+echo "Fetching input.txt"
+echo "------------------"
+./bin/input "$d"
+
+
+
+printf "\n"
+echo "Fetching README.md"
+echo "------------------"
+./bin/readme "$d"
+
+
+printf "\n"
+echo "================="
+echo "Created $new_day_dir"
+echo "================="
