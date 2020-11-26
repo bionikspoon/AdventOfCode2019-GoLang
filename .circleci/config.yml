@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.2
+
 jobs:
   build:
     docker:
@@ -16,10 +20,13 @@ jobs:
     working_directory: /go/src/github.com/<< parameters.org-name >>/<< parameters.repo-name >>
     steps:
       - checkout
+      - run:
+          name: Get dependencies
+          command: go get -t -v ./...
       - run: echo $PWD
       - run:
           name: "go test"
-          command: go test -coverprofile=c.out ./...
+          command: go test -race -covermode=atomic -coverprofile=c.out ./...
       - run:
           name: "Create a temp directory for artifacts"
           command: |
@@ -28,3 +35,5 @@ jobs:
             mv coverage.html /tmp/artifacts
       - store_artifacts:
           path: /tmp/artifacts
+      - codecov/upload:
+          file: c.out
