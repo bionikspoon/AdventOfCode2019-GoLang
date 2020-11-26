@@ -1,0 +1,19 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.15
+    working_directory: /go/src/github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+    steps:
+      - checkout
+      - run:
+          name: "go test"
+          command: go test -coverprofile=c.out ./...
+      - run:
+          name: "Create a temp directory for artifacts"
+          command: |
+            mkdir -p /tmp/artifacts
+            go tool cover -html=c.out -o coverage.html
+            mv coverage.html /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
