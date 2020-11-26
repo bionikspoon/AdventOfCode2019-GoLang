@@ -1,9 +1,16 @@
 version: 2.1
 jobs:
-  build:
+  test:
     docker:
-      - image: circleci/golang:1.15
-    working_directory: /go/src/github.com/{{ .Environment.CIRCLE_PROJECT_USERNAME }}/{{ .Environment.CIRCLE_PROJECT_REPONAME }}
+    - image: circleci/golang:1.15
+    parameters:
+      org-name:
+        type: env_var_name
+        default: CIRCLE_PROJECT_USERNAME
+      repo-name:
+        type: env_var_name
+        default: CIRCLE_PROJECT_REPONAME
+    working_directory: /go/src/github.com/<< parameters.org-name >>/<< parameters.repo-name >>
     steps:
       - checkout
       - run: echo $PWD
