@@ -7,28 +7,25 @@ import (
 
 // Part1 solves for the fuel requirement for modules
 func Part1(input string) string {
-
-	moduleMasses := readInts(input)
-	fuelRequired := sumWith(fuelRequiredForMass, moduleMasses)
-
-	return strconv.Itoa(fuelRequired)
+	return withIO(input, sumWith(fuelRequiredForMass))
 }
 
 // Part2 solves for the fuel requirement for additional fuel
 func Part2(input string) string {
-	moduleMasses := readInts(input)
-	fuelRequired := sumWith(fuelRequiredForFuel, moduleMasses)
 
-	return strconv.Itoa(fuelRequired)
+	return withIO(input, sumWith(fuelRequiredForFuel))
 }
 
-func sumWith(fn func(int) int, masses []int) int {
-	sum := 0
-	for _, mass := range masses {
-		sum += fn(mass)
-	}
+func sumWith(fn func(int) int) func([]int) int {
 
-	return sum
+	return func(masses []int) int {
+		sum := 0
+		for _, mass := range masses {
+			sum += fn(mass)
+		}
+
+		return sum
+	}
 }
 
 func fuelRequiredForMass(mass int) int {
@@ -43,6 +40,12 @@ func fuelRequiredForFuel(mass int) int {
 	}
 
 	return 0
+}
+
+func withIO(input string, fn func(ints []int) int) string {
+	ints := readInts(input)
+
+	return strconv.Itoa(fn(ints))
 }
 
 func readInts(input string) (ints []int) {
