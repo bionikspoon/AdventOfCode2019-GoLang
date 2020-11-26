@@ -17,7 +17,8 @@ exec 3> "$tmpfile"
 exec 4< "$tmpfile"
 rm "$tmpfile"
 
-curl "https://adventofcode.com/2019/day/${d}" \
+curl --progress-bar \
+  "https://adventofcode.com/2019/day/${d}" \
   -H "cookie: session=${SESSION_ID}" \
   | pup --plain "article" \
   >&3
