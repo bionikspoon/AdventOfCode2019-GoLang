@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.15
-    working_directory: /go/src/github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+    working_directory: /go/src/github.com/{{ .Environment.CIRCLE_PROJECT_USERNAME }}/{{ .Environment.CIRCLE_PROJECT_REPONAME }}
     steps:
       - checkout
       - run: echo $PWD
