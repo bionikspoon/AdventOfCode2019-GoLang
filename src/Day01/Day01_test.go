@@ -1,14 +1,14 @@
 package day01
 
 import (
-	"io/ioutil"
+	"lib/testutils"
 	"testing"
 )
 
 func TestPart1(t *testing.T) {
 	want := "3497399"
 
-	if got := Part1(readFile(t, "input.txt")); got != want {
+	if got := Part1(testutils.ReadFile(t, "input.txt")); got != want {
 		t.Errorf("Part1() = %v, want %v", got, want)
 	}
 }
@@ -16,18 +16,10 @@ func TestPart1(t *testing.T) {
 func TestPart2(t *testing.T) {
 	want := "5243207"
 
-	if got := Part2(readFile(t, "input.txt")); got != want {
+	if got := Part2(testutils.ReadFile(t, "input.txt")); got != want {
 		t.Errorf("Part2() = %v, want %v", got, want)
 	}
 
-}
-
-func readFile(t *testing.T, filename string) string {
-	input, err := ioutil.ReadFile(filename)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return string(input)
 }
 
 func Test_fuelRequiredForMass(t *testing.T) {
