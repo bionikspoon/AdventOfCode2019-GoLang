@@ -10,7 +10,7 @@ import (
 func Part1(input string) string {
 	fields := strings.Fields(input)
 
-	distance, err := NewDiagram(fields)
+	distance, err := shortestManhattenDistance(fields)
 	if err != nil {
 		panic(err)
 	}
@@ -18,7 +18,13 @@ func Part1(input string) string {
 }
 
 func Part2(input string) string {
-	return input
+	fields := strings.Fields(input)
+
+	distance, err := shortestLatency(fields)
+	if err != nil {
+		panic(err)
+	}
+	return strconv.Itoa(distance)
 }
 
 type Direction int
@@ -44,7 +50,15 @@ type Coordinates struct {
 	x, y int
 }
 
-func NewDiagram(serializedWires []string) (int, error) {
+type GridWire struct {
+	steps int
+	wire  *Wire
+}
+
+type Grid map[Coordinates][]GridWire
+
+func NewGrid(serializedWires []string) (*Grid, error) {
+	grid := make(Grid)
 	wires := make([]*Wire, len(serializedWires))
 	for i, serializedWire := range serializedWires {
 		serializedInstructions := strings.Split(serializedWire, ",")
@@ -55,7 +69,7 @@ func NewDiagram(serializedWires []string) (int, error) {
 			instruction, err := deserializeInstruction(serializedInstruction)
 
 			if err != nil {
-				return 0, err
+				return &grid, err
 			}
 
 			instructions[j] = instruction
@@ -64,13 +78,14 @@ func NewDiagram(serializedWires []string) (int, error) {
 		wires[i] = &Wire{i, instructions}
 	}
 
-	grid := make(map[Coordinates][]*Wire)
-
 	for _, wire := range wires {
+		steps := 0
 		position := Coordinates{0, 0}
 
 		for _, instruction := range wire.instructions {
 			for i := 0; i < instruction.distance; i++ {
+				steps++
+
 				switch instruction.direction {
 				case U:
 					position.y++
@@ -85,40 +100,81 @@ func NewDiagram(serializedWires []string) (int, error) {
 				_, ok := grid[position]
 
 				if !ok {
-					grid[position] = []*Wire{}
+					grid[position] = []GridWire{}
 				}
 
 				if positionContains(grid[position], wire) {
 					continue
 				}
 
-				grid[position] = append(grid[position], wire)
+				grid[position] = append(grid[position], GridWire{steps, wire})
 			}
 		}
 	}
 
-	intersections := []Coordinates{}
+	return &grid, nil
+}
 
-	for coordinates, wires := range grid {
+type Intersection struct {
+	coordinates Coordinates
+	gridWires   []GridWire
+}
+
+func (grid *Grid) Intersections() []Intersection {
+	intersections := []Intersection{}
+
+	for coordinates, wires := range *grid {
 		if len(wires) == 1 {
 			continue
 		}
 
-		intersections = append(intersections, coordinates)
+		intersections = append(intersections, Intersection{coordinates, wires})
 	}
 
-	fmt.Println(intersections)
+	return intersections
+}
+
+func shortestManhattenDistance(serializedWires []string) (int, error) {
+	grid, err := NewGrid(serializedWires)
+	if err != nil {
+		return 0, err
+	}
+	intersections := grid.Intersections()
 
 	intersectionDistances := make([]int, len(intersections))
 	centralPort := Coordinates{0, 0}
 
 	for i, intersection := range intersections {
-		intersectionDistances[i] = manhattanDistance(intersection, centralPort)
+		intersectionDistances[i] = manhattanDistance(intersection.coordinates, centralPort)
 	}
 
-	fmt.Println(intersectionDistances)
+	return minInt(intersectionDistances), nil
+}
+
+func shortestLatency(serializedWires []string) (int, error) {
+	grid, err := NewGrid(serializedWires)
+	if err != nil {
+		return 0, err
+	}
+	intersections := grid.Intersections()
+
+	intersectionDistances := make([]int, len(intersections))
+
+	for i, intersection := range intersections {
+		intersectionDistances[i] = intersectionSteps(intersection)
+	}
 
 	return minInt(intersectionDistances), nil
+}
+
+func intersectionSteps(intersection Intersection) int {
+	steps := 0
+
+	for _, gridWire := range intersection.gridWires {
+		steps += gridWire.steps
+	}
+
+	return steps
 }
 
 func manhattanDistance(a, b Coordinates) int {
@@ -142,9 +198,9 @@ func intAbs(x int) int {
 	return x
 }
 
-func positionContains(gridPosition []*Wire, wire *Wire) bool {
+func positionContains(gridPosition []GridWire, wire *Wire) bool {
 	for _, candidate := range gridPosition {
-		if candidate == wire {
+		if candidate.wire == wire {
 			return true
 		}
 	}
