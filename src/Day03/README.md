@@ -8,7 +8,8 @@ The wires twist and turn , but the two wires occasionally cross paths. To fix th
 
 For example, if the first wire's path is `R8,U5,L5,D3` , then starting from the central port ( `o` ), it goes right `8` , up `5` , left `5` , and finally down `3` :
 
-  `...........
+```
+...........
 ...........
 ...........
 ....+-+.
@@ -17,24 +18,23 @@ For example, if the first wire's path is `R8,U5,L5,D3` , then starting from the 
 ....|....|.
 .........|.
 .o-+.
-...........` 
- 
+...........
+```
 
 Then, if the second wire's path is `U7,R6,D4,L4` , it goes up `7` , right `6` , down `4` , and left `4` :
 
-  `...........
+```
+...........
 .+--+...
 .|.....|...
 .|..+--X-+.
 .|..|..|.|.
-.|.-
-   _X_ 
-   --+.|.
+.|.-X--+.|.
 .|..|....|.
 .|.......|.
 .o-+.
-...........` 
- 
+...........
+```
 
 These wires cross at two locations (marked `X` ), but the lower-left one is closer to the central port: its distance is `3 + 3 = 6` .
 
@@ -55,7 +55,8 @@ To do this, calculate the _number of steps_ each wire takes to reach each inters
 
 The number of steps a wire takes is the total number of grid squares the wire has entered to get to that location, including the intersection being considered. Again consider the example from above:
 
-  `...........
+```
+...........
 .+--+...
 .|.....|...
 .|..+--X-+.
@@ -64,8 +65,8 @@ The number of steps a wire takes is the total number of grid squares the wire ha
 .|..|....|.
 .|.......|.
 .o-+.
-...........` 
- 
+...........
+```
 
 In the above example, the intersection closest to the central port is reached after `8+5+5+2 = _20_` steps by the first wire and `7+6+4+3 = _20_` steps by the second wire for a total of `20+20 = _40_` steps.
 
