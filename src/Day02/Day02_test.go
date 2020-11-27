@@ -15,20 +15,11 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
-	t.SkipNow()
-	want := "hello santa"
+	want := "4925"
 
 	if got := Part2(readFile(t, "input.txt")); got != want {
 		t.Errorf("Part2() = %v, want %v", got, want)
 	}
-}
-
-func readFile(t *testing.T, filename string) string {
-	input, err := ioutil.ReadFile(filename)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return strings.TrimSpace(string(input))
 }
 
 func Test_run(t *testing.T) {
@@ -52,4 +43,21 @@ func Test_run(t *testing.T) {
 			}
 		})
 	}
+}
+
+func run(input string) string {
+	opcodes := deserialize(input)
+
+	nextOpcodes, err := runProgram(opcodes)
+	check(err)
+
+	return serialize(nextOpcodes)
+}
+
+func readFile(t *testing.T, filename string) string {
+	input, err := ioutil.ReadFile(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return strings.TrimSpace(string(input))
 }
