@@ -12,7 +12,7 @@ func withIO(input string, fn func(ints []int) int) string {
 }
 
 func readInts(input string) (ints []int) {
-	lines := strings.Split(strings.TrimSpace(input), "\n")
+	lines := strings.Split(input, "\n")
 
 	for _, line := range lines {
 		i, err := strconv.Atoi(line)

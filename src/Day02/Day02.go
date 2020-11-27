@@ -6,9 +6,20 @@ import (
 	"strconv"
 )
 
+type programKnobs struct {
+	noun, verb int
+}
+type memory []int
+
+type trialResults struct {
+	candidate programKnobs
+	memory    memory
+	err       error
+}
+
 // Part1 finds the head value after running the program
 func Part1(input string) string {
-	programInput := programInput{12, 2}
+	programInput := programKnobs{12, 2}
 	opcodes := deserialize(input)
 
 	nextOpcodes, err := runWithInput(programInput, opcodes)
@@ -27,55 +38,64 @@ func Part2(input string) string {
 	return strconv.Itoa(100*solution.noun + solution.verb)
 }
 
-type programInput struct {
-	noun, verb int
-}
+func goalSeek(target int, memory memory) (programKnobs, error) {
+	ch := make(chan trialResults)
 
-func goalSeek(target int, opcodes []int) (programInput, error) {
 	for noun := 0; noun <= 99; noun++ {
 		for verb := 0; verb <= 99; verb++ {
-			candidate := programInput{noun, verb}
+			candidate := programKnobs{noun, verb}
 
-			nextOpcodes, err := runWithInput(candidate, dup(opcodes))
-			if err != nil {
-				return candidate, err
-			}
-
-			if nextOpcodes[0] == target {
-				return candidate, nil
-			}
+			go trial(ch, candidate, memory)
 		}
 	}
 
-	return programInput{}, errors.New("goalSeek never finished")
+	for i := 0; i < 100*100; i++ {
+		trialResults := <-ch
+
+		if trialResults.err != nil {
+			return trialResults.candidate, trialResults.err
+		}
+
+		if trialResults.memory[0] == target {
+			return trialResults.candidate, trialResults.err
+		}
+	}
+
+	return programKnobs{}, errors.New("goalSeek never finished")
 }
 
-func runWithInput(input programInput, opcodes []int) ([]int, error) {
-	opcodes[1] = input.noun
-	opcodes[2] = input.verb
+func trial(ch chan trialResults, candidate programKnobs, memory memory) {
+	nextMemory, err := runWithInput(candidate, dup(memory))
 
-	return runProgram(opcodes)
+	ch <- trialResults{candidate, nextMemory, err}
 }
 
-func runProgram(opcodes []int) ([]int, error) {
+func runWithInput(input programKnobs, memory memory) (memory, error) {
+	memory[1] = input.noun
+	memory[2] = input.verb
+
+	return runProgram(memory)
+}
+
+func runProgram(memory memory) (memory, error) {
 	const maxIterations = 100
 
 	instructionPointer := 0
 
 	for j := 0; j <= maxIterations; j++ {
-		opcode := opcodes[instructionPointer]
+		opcode := memory[instructionPointer]
 
 		switch opcode {
 		case 1:
-			opcodes[opcodes[instructionPointer+3]] = opcodes[opcodes[instructionPointer+1]] + opcodes[opcodes[instructionPointer+2]]
+			memory[memory[instructionPointer+3]] = memory[memory[instructionPointer+1]] + memory[memory[instructionPointer+2]]
 			instructionPointer += 4
 
 		case 2:
-			opcodes[opcodes[instructionPointer+3]] = opcodes[opcodes[instructionPointer+1]] * opcodes[opcodes[instructionPointer+2]]
+			memory[memory[instructionPointer+3]] = memory[memory[instructionPointer+1]] * memory[memory[instructionPointer+2]]
 			instructionPointer += 4
 
 		case 99:
-			return opcodes, nil
+			return memory, nil
 
 		default:
 			return nil, fmt.Errorf("Unknown opcode %+v", opcode)
