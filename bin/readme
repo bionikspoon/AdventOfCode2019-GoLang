@@ -17,11 +17,15 @@ exec 3> "$tmpfile"
 exec 4< "$tmpfile"
 rm "$tmpfile"
 
-curl --progress-bar \
-  "https://adventofcode.com/2019/day/${d}" \
+url="https://adventofcode.com/2019/day/${d}"
+
+curl "$url" \
   -H "cookie: session=${SESSION_ID}" \
   | pup --plain "article" \
+  | sed -e "s/---//g" \
   >&3
 
+echo "<h2>Link</h2>" >&3
+echo "<a href='$url'>$url</a>" >&3
 
 html-to-md <&4 > "src/Day${D}/README.md"
