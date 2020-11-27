@@ -1,4 +1,4 @@
-package dayxx
+package day03
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestPart1(t *testing.T) {
-	//// t.Skip("skipping")
+	t.Skip("skipping")
 	want := "hello santa"
 
 	if got := Part1(testutils.ReadFile(t, "input.txt")); got != want {
@@ -16,7 +16,7 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
-	//// t.Skip("skipping")
+	t.Skip("skipping")
 	want := "hello santa"
 
 	if got := Part2(testutils.ReadFile(t, "input.txt")); got != want {
