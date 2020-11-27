@@ -1,7 +1,7 @@
 package day01
 
 import (
-	"bionikspoon/go-advent-of-code-2019/lib/testutils"
+	"bionikspoon/go-advent-of-code-2019/internal/testutils"
 	"testing"
 )
 
