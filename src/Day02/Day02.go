@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 // Part1 finds the head value after running the program
@@ -51,12 +50,6 @@ func goalSeek(target int, opcodes []int) (programInput, error) {
 	return programInput{}, errors.New("goalSeek never finished")
 }
 
-func dup(ints []int) []int {
-	next := make([]int, len(ints))
-	copy(next, ints)
-	return next
-}
-
 func runWithInput(input programInput, opcodes []int) ([]int, error) {
 	opcodes[1] = input.noun
 	opcodes[2] = input.verb
@@ -90,33 +83,4 @@ func runProgram(opcodes []int) ([]int, error) {
 	}
 
 	return nil, errors.New("Program never finished")
-}
-
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
-func deserialize(input string) []int {
-	opcodes := []int{}
-
-	for _, s := range strings.Split(input, ",") {
-		opcode, err := strconv.Atoi(s)
-		check(err)
-
-		opcodes = append(opcodes, opcode)
-	}
-
-	return opcodes
-}
-
-func serialize(opcodes []int) string {
-	codes := make([]string, len(opcodes))
-
-	for index, opcode := range opcodes {
-		codes[index] = strconv.Itoa(opcode)
-	}
-
-	return strings.Join(codes, ",")
 }
