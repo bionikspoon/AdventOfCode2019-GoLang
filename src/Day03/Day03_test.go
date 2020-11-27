@@ -3,10 +3,11 @@ package day03
 import (
 	"testing"
 
-	"lib/testutils"
+	"bionikspoon/go-advent-of-code-2019/lib/testutils"
 )
 
 func TestPart1(t *testing.T) {
+	t.Skip("skipping")
 	want := "hello santa"
 
 	if got := Part1(testutils.ReadFile(t, "input.txt")); got != want {
@@ -15,6 +16,7 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
+	t.Skip("skipping")
 	want := "hello santa"
 
 	if got := Part2(testutils.ReadFile(t, "input.txt")); got != want {

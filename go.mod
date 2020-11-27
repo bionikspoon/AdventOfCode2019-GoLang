@@ -1,7 +1,3 @@
-module bionikspoon/AdventOfCode2019-GoLang
+module bionikspoon/go-advent-of-code-2019
 
 go 1.15
-
-replace lib/testutils => ./lib/testutils
-
-require lib/testutils v0.0.0-00010101000000-000000000000

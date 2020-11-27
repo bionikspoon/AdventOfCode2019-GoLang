@@ -13,7 +13,7 @@ jobs:
         default: bionikspoon
       repo-name:
         type: string
-        default: AdventOfCode2019-GoLang
+        default: go-advent-of-code-2019
     working_directory: /go/src/github.com/<< parameters.org-name >>/<< parameters.repo-name >>
     steps:
       - checkout
