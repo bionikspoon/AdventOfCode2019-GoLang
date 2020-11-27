@@ -32,22 +32,36 @@ type programInput struct {
 }
 
 func goalSeek(target int, opcodes []int) (programInput, error) {
+	ch := make(chan programInput)
+	errCh := make(chan error)
+
 	for noun := 0; noun <= 99; noun++ {
 		for verb := 0; verb <= 99; verb++ {
 			candidate := programInput{noun, verb}
 
-			nextOpcodes, err := runWithInput(candidate, dup(opcodes))
-			if err != nil {
-				return candidate, err
-			}
-
-			if nextOpcodes[0] == target {
-				return candidate, nil
-			}
+			go trial(ch, errCh, target, candidate, opcodes)
 		}
 	}
 
-	return programInput{}, errors.New("goalSeek never finished")
+	select {
+	case candidate := <-ch:
+		return candidate, nil
+	case err := <-errCh:
+		return programInput{}, err
+	default:
+		return programInput{}, errors.New("goalSeek never finished")
+	}
+}
+
+func trial(ch chan programInput, errCh chan error, target int, candidate programInput, opcodes []int) {
+	nextOpcodes, err := runWithInput(candidate, dup(opcodes))
+	if err != nil {
+		errCh <- err
+		return
+	}
+	if nextOpcodes[0] == target {
+		ch <- candidate
+	}
 }
 
 func runWithInput(input programInput, opcodes []int) ([]int, error) {
