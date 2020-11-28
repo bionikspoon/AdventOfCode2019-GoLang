@@ -3,7 +3,7 @@ package dayxx
 import (
 	"testing"
 
-	"bionikspoon/go-advent-of-code-2019/lib/testutils"
+	"bionikspoon/go-advent-of-code-2019/internal/testutils"
 )
 
 func TestPart1(t *testing.T) {

@@ -24,7 +24,8 @@ cp -rv "src/Template" "$new_day_dir"
 
 
 log "Replacing placeholder values"
-find "$new_day_dir" -name "*.go" -exec sed -i "" "s/dayxx/day${D}/" {} +
+find "$new_day_dir" -name "*.go" -exec sed -i "" "s/dayxx/day${D}/g" {} +
+find "$new_day_dir" -name "*.go" -exec sed -i "" "s/\\/\\/\\/\\/ //g" {} +
 mv -v "$new_day_dir/DayXX_test.go" "$new_day_dir/Day${D}_test.go"
 mv -v "$new_day_dir/DayXX.go" "$new_day_dir/Day${D}.go"
 

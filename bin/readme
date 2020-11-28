@@ -21,7 +21,7 @@ url="https://adventofcode.com/2019/day/${d}"
 
 curl "$url" \
   -H "cookie: session=${SESSION_ID}" \
-  | pup --plain "article" \
+  | pup --pre --plain 'article' \
   | sed -e "s/---//g" \
   >&3
 
